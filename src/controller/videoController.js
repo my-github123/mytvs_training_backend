@@ -68,13 +68,28 @@ exports.getVideosByUserId = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 exports.insertVideosToGarages = async (selectedGarages, selectedVideos) => {
   try {
     const bulkInsertData = [];
 
     for (const garageId of selectedGarages) {
-      for (const video of selectedVideos) {
+      // Check existing records for current garageId
+      const existingVideoIds = await Post.findAll({
+        where: {
+          userId: garageId,
+          videoId: selectedVideos.map(video => video.id),
+        },
+        attributes: ['videoId'], // Only fetch videoId to check existing records
+        raw: true,
+      });
+
+      // Filter selectedVideos based on existing records for current garageId
+      const filteredVideos = selectedVideos.filter(video => {
+        return !existingVideoIds.some(existing => existing.videoId === video.id);
+      });
+
+      // Create bulk insert data for filtered videos
+      for (const video of filteredVideos) {
         const videoData = {
           userId: garageId,
           videoId: video.id,
@@ -85,8 +100,9 @@ exports.insertVideosToGarages = async (selectedGarages, selectedVideos) => {
         bulkInsertData.push(videoData);
       }
     }
-
-    await Post.bulkCreate(bulkInsertData);
+    if (bulkInsertData.length > 0) {
+      await Post.bulkCreate(bulkInsertData);
+    }
 
     return {
       success: true,
@@ -100,6 +116,37 @@ exports.insertVideosToGarages = async (selectedGarages, selectedVideos) => {
     };
   }
 };
+// exports.insertVideosToGarages = async (selectedGarages, selectedVideos) => {
+//   try {
+//     const bulkInsertData = [];
+
+//     for (const garageId of selectedGarages) {
+//       for (const video of selectedVideos) {
+//         const videoData = {
+//           userId: garageId,
+//           videoId: video.id,
+//           VideoUrl: video.url,
+//           Title: video.name,
+//           Description: video.description,
+//         };
+//         bulkInsertData.push(videoData);
+//       }
+//     }
+
+//     await Post.bulkCreate(bulkInsertData);
+
+//     return {
+//       success: true,
+//       message: "Videos inserted to garages successfully",
+//     };
+//   } catch (error) {
+//     console.error("Error inserting videos to garages:", error);
+//     return {
+//       success: false,
+//       error: "An error occurred while inserting videos to garages",
+//     };
+//   }
+// };
 
 exports.updatedisableFlag = async (req, res) => {
   const { videoIds, isEnabled } = req.body;
