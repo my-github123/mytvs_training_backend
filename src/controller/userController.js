@@ -241,13 +241,17 @@ exports.getUserDetails = async (req, res) => {
 exports.getGarageDetails = async (req, res) => {
   try {
     const garages = await User.findAll({
-      attributes: ["garageName", "garageId", "userId"],
+      attributes: [
+        "garageName",
+      ],
       where: {
         role: {
           [Sequelize.Op.not]: "Admin",
         },
       },
+      group: ['garageName'],
     });
+
     res.json(garages);
   } catch (error) {
     console.error("Error executing Sequelize query:", error);
