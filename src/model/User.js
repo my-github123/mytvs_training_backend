@@ -3,10 +3,14 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 
 const User = sequelize.define("user", {
-  userId: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   username: {
     type: DataTypes.STRING,

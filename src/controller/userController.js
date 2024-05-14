@@ -6,7 +6,7 @@ const { Sequelize } = require("sequelize");
 
 exports.registerUser = async (req, res) => {
   try {
-    const { username, email, password, phoneNumber, address } = req.body;
+    const { username, email, password, phoneNumber, address, userId } = req.body;
     console.log(req.body, "BODY IS THERE....");
 
     // Hash the password
@@ -14,6 +14,7 @@ exports.registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
+      userId,
       username,
       email,
       password: hashedPassword,
