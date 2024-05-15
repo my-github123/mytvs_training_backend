@@ -6,7 +6,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 // router.post("/register", userController.registerUser);
 router.post("/login", userController.loginUser);
-router.get("/getGarages/:garageType", userController.getGarageDetails);
+router.get("/getGarages", userController.getGarageDetails);
 router.get("/getUsers", userController.getAllUsers);
 router.post("/getUserByRole", userController.loginUserByRole);
 router.put("/users/:userId", userController.resetPassword);
