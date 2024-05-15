@@ -239,14 +239,23 @@ exports.getUserDetails = async (req, res) => {
 };
 
 exports.getGarageDetails = async (req, res) => {
+  const { garageType } = req.body;
+
   try {
-    const garages = await User.findAll({
-      where: {
-        role: {
-          [Sequelize.Op.not]: "Admin",
-        },
+    let whereCondition = {
+      role: {
+        [Sequelize.Op.not]: "Admin",
       },
-      group: ['garageName'],
+    };
+
+    if (garageType !== "all") {
+      whereCondition.garageType = garageType;
+    }
+
+    const garages = await User.findAll({
+      where: whereCondition,
+      // attributes: ["garageName", "garageId", "userId"],
+      group: ["garageName"],
     });
 
     res.json(garages);
