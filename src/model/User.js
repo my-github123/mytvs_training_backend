@@ -44,6 +44,10 @@ const User = sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  garageName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   garageId: {
     type: DataTypes.STRING,
     allowNull: false,
