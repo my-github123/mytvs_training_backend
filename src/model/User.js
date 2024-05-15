@@ -44,7 +44,7 @@ const User = sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  garageName: {
+  garageType: {
     type: DataTypes.STRING,
     allowNull: true,
   },
