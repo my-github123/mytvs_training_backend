@@ -239,25 +239,31 @@ exports.getUserDetails = async (req, res) => {
 };
 
 exports.getGarageDetails = async (req, res) => {
-  const { garageType } = req.body;
+  const { garageType } = req.query;
+  console.log('Received garageType:', garageType);
 
   try {
-    let whereCondition = {
-      role: {
-        [Sequelize.Op.not]: "Admin",
-      },
-    };
-
-    if (garageType !== "all") {
-      whereCondition.garageType = garageType;
+    let garages;
+    if (garageType === 'all') {
+      garages = await User.findAll({
+        where: {
+          role: {
+            [Sequelize.Op.not]: "Admin",
+          },
+        },
+        group: ["garageName"],
+      });
+    } else {
+      garages = await User.findAll({
+        where: { 
+          role: {
+            [Sequelize.Op.not]: "Admin",
+          },
+          garageType: garageType
+        },
+        group: ["garageName"],
+      });
     }
-
-    const garages = await User.findAll({
-      where: whereCondition,
-      // attributes: ["garageName", "garageId", "userId"],
-      group: ["garageName"],
-    });
-
     res.json(garages);
   } catch (error) {
     console.error("Error executing Sequelize query:", error);
