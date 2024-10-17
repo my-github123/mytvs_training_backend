@@ -29,6 +29,7 @@ const debitRoutes = require("./src/routes/debitRoutes");
 const debitCreditRoutes = require("./src/routes/getDebitCreditRoutes");
 const verifyVPARoute = require('./src/routes/verifyVPARoutes');
 const ipRoutes = require("./src/routes/ipRoutes");
+const pdfRoutes=require("./src/routes/pdfRoutes")
 
 
 
@@ -107,7 +108,7 @@ app.use("/rsa-trg", serviceList);
 app.use("/rsa-trg", debitRoutes);
 app.use("/rsa-trg", debitCreditRoutes);
 app.use("/rsa-trg", verifyVPARoute);
-
+app.use("/rsa-trg",pdfRoutes)
 app.use("/rsa-trg", ipRoutes);
 
 
@@ -123,7 +124,7 @@ app.get("/",(req,res)=>{
 // 192.168.2.8
 
 
-const PORT = process.env.PORT ||4100;
+const PORT = process.env.PORT ||8100;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
