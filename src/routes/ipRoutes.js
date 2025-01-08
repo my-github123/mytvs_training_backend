@@ -24,7 +24,7 @@ router.get('/getServer', async(req, res) => {
           
 
     
-    res.status(200).json({messege:publicIp})
+    res.status(200).json({message:publicIp})
 });
 
 module.exports=router;
